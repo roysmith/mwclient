@@ -9,14 +9,16 @@ import logging
 import requests
 import responses
 import pkg_resources  # part of setuptools
-import mock
 import time
+import json
 from requests_oauthlib import OAuth1
 
 try:
-    import json
+    import unittest.mock as mock
 except ImportError:
-    import simplejson as json
+    # Python < 3.3
+    import mock
+
 
 if __name__ == "__main__":
     print()

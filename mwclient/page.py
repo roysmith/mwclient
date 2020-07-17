@@ -45,6 +45,9 @@ class Page(object):
         else:
             self.page_title = self.name
 
+        self.base_title = self.page_title.split('/')[0]
+        self.base_name = self.name.split('/')[0]
+
         self.touched = parse_timestamp(info.get('touched'))
         self.revision = info.get('lastrevid', 0)
         self.exists = 'missing' not in info
@@ -214,7 +217,7 @@ class Page(object):
             data['starttimestamp'] = time.strftime('%Y%m%d%H%M%S', self.edit_time)
         if bot:
             data['bot'] = '1'
-        if section:
+        if section is not None:
             data['section'] = section
 
         data.update(kwargs)

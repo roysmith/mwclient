@@ -6,7 +6,7 @@ import pytest
 import logging
 import requests
 import responses
-import mock
+import json
 import mwclient
 from mwclient.page import Page
 from mwclient.client import Site
@@ -14,9 +14,11 @@ from mwclient.listing import Category
 from mwclient.errors import APIError, AssertUserFailedError, ProtectedPageError, InvalidPageTitle
 
 try:
-    import json
+    import unittest.mock as mock
 except ImportError:
-    import simplejson as json
+    # Python < 3.3
+    import mock
+
 
 if __name__ == "__main__":
     print()

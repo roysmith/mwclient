@@ -6,10 +6,7 @@ import six
 
 from collections import OrderedDict
 
-try:
-    import json
-except ImportError:
-    import simplejson as json
+import json
 import requests
 from requests.auth import HTTPBasicAuth, AuthBase
 from requests_oauthlib import OAuth1
@@ -19,12 +16,7 @@ import mwclient.listing as listing
 from mwclient.sleep import Sleepers
 from mwclient.util import parse_timestamp, read_in_chunks
 
-try:
-    import gzip
-except ImportError:
-    gzip = None
-
-__version__ = '0.10.0'
+__version__ = '0.10.1'
 
 log = logging.getLogger(__name__)
 
@@ -371,7 +363,7 @@ class Site(object):
             The raw text response.
         """
         headers = {}
-        if self.compress and gzip:
+        if self.compress:
             headers['Accept-Encoding'] = 'gzip'
         sleeper = self.sleepers.make((script, data))
 
@@ -379,7 +371,7 @@ class Site(object):
         host = self.host
         if isinstance(host, (list, tuple)):
             warnings.warn(
-                'Specifying host as a tuple is deprecated as of mwclient 0.10.0. '
+                'Specifying host as a tuple is deprecated as of mwclient 0.10.1. '
                 + 'Please use the new scheme argument instead.',
                 DeprecationWarning
             )
@@ -419,7 +411,7 @@ class Site(object):
                                         text=stream.text))
                     sleeper.sleep()
 
-            except requests.exceptions.ConnectionError:
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 # In the event of a network problem
                 # (e.g. DNS failure, refused connection, etc),
                 # Requests will raise a ConnectionError exception.
